@@ -6,7 +6,7 @@ import { Plus, FileText } from "lucide-react";
 import PrescriptionCard from "@/components/PrescriptionCard";
 import PrescriptionForm from "@/components/PrescriptionForm";
 import SearchFilter from "@/components/SearchFilter";
-import { getUser, isDoctor, type User } from "@/lib/auth";
+import { getUser, isDoctor, DEMO_USERS, type User } from "@/lib/auth";
 import {
   getPrescriptions,
   getPrescriptionsByPatient,
@@ -16,7 +16,6 @@ import {
   getAllPatients,
   type Prescription,
 } from "@/lib/data";
-import { DEMO_USERS } from "@/lib/auth";
 import { generatePrescriptionPDF } from "@/lib/pdf";
 
 export default function PrescriptionsPage() {
@@ -54,15 +53,13 @@ export default function PrescriptionsPage() {
     setFiltered(searchPrescriptions(query, f));
   };
 
-  const handleSubmit = (data: Omit<Prescription, "id" | "createdAt" | "updatedAt" | "doctorId" | "doctorName">) => {
+  const handleSubmit = (
+    data: Omit<Prescription, "id" | "createdAt" | "updatedAt" | "doctorId" | "doctorName">
+  ) => {
     if (editing) {
       updatePrescription(editing.id, data);
     } else {
-      createPrescription({
-        ...data,
-        doctorId: user!.id,
-        doctorName: user!.name,
-      });
+      createPrescription({ ...data, doctorId: user!.id, doctorName: user!.name });
     }
     loadData(user!);
     setEditing(null);
@@ -106,13 +103,13 @@ export default function PrescriptionsPage() {
   ];
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="section-title text-2xl">
             {doctor ? "Prescriptions" : "My Prescriptions"}
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="section-subtitle">
             {doctor ? "Manage all prescriptions" : "View your prescriptions"}
           </p>
         </div>
@@ -124,22 +121,20 @@ export default function PrescriptionsPage() {
             }}
             className="btn btn-primary"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-4 h-4" />
             New Prescription
           </button>
         )}
       </div>
 
-      <div className="mb-6">
-        <SearchFilter
-          onSearch={handleSearch}
-          onFilterChange={handleFilterChange}
-          filters={filterConfig}
-        />
-      </div>
+      <SearchFilter
+        onSearch={handleSearch}
+        onFilterChange={handleFilterChange}
+        filters={filterConfig}
+      />
 
       {filtered.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filtered.map((rx, i) => (
             <PrescriptionCard
               key={rx.id}
@@ -151,10 +146,10 @@ export default function PrescriptionsPage() {
           ))}
         </div>
       ) : (
-        <div className="card text-center py-16">
-          <FileText className="w-16 h-16 text-gray-200 mx-auto mb-4" />
-          <p className="text-lg text-gray-500">No prescriptions found</p>
-          <p className="text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
+        <div className="card text-center py-20">
+          <FileText className="w-14 h-14 text-gray-200 mx-auto mb-4" />
+          <p className="text-lg text-gray-400 font-medium">No prescriptions found</p>
+          <p className="text-sm text-gray-300 mt-1">Try adjusting your search or filters</p>
         </div>
       )}
 

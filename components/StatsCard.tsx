@@ -22,25 +22,27 @@ export default function StatsCard({
 }: StatsCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
-      className="card card-hover min-h-[160px] flex flex-col"
+      transition={{ duration: 0.35, delay: index * 0.08 }}
+      className="card card-hover flex flex-col"
     >
       <div
-        className="w-12 h-12 rounded-2xl flex items-center justify-center"
-        style={{ backgroundColor: `${color}15` }}
+        className="w-11 h-11 rounded-xl flex items-center justify-center"
+        style={{ backgroundColor: `${color}12` }}
       >
         {icon}
       </div>
-      <p className="text-sm text-gray-500 font-medium mt-4">{title}</p>
-      <p className="text-3xl font-bold text-gray-900 mt-1">{value}</p>
+      <p className="text-[13px] text-gray-400 font-medium mt-4 tracking-wide uppercase">
+        {title}
+      </p>
+      <p className="text-2xl font-bold text-gray-900 mt-1 tracking-tight">{value}</p>
       {trend && (
-        <div className="flex items-center gap-1 mt-2">
+        <div className="flex items-center gap-1.5 mt-3">
           {trend.value >= 0 ? (
-            <TrendingUp className="w-4 h-4 text-green-500" />
+            <TrendingUp className="w-3.5 h-3.5 text-green-500" />
           ) : (
-            <TrendingDown className="w-4 h-4 text-red-500" />
+            <TrendingDown className="w-3.5 h-3.5 text-red-500" />
           )}
           <span
             className={`text-xs font-medium ${

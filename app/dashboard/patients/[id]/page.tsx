@@ -56,17 +56,14 @@ export default function PatientDetailPage() {
   if (!user || !isDoctor(user)) {
     return (
       <div className="text-center py-20">
-        <p className="text-xl text-gray-500">Access denied. Doctors only.</p>
+        <p className="text-xl text-gray-400">Access denied. Doctors only.</p>
       </div>
     );
   }
 
   return (
-    <div>
-      <button
-        onClick={() => router.push("/dashboard/patients")}
-        className="btn btn-ghost mb-6"
-      >
+    <div className="max-w-4xl mx-auto space-y-6">
+      <button onClick={() => router.push("/dashboard/patients")} className="btn btn-ghost -ml-3">
         <ArrowLeft className="w-4 h-4" />
         Back to Patients
       </button>
@@ -74,31 +71,35 @@ export default function PatientDetailPage() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="card mb-8"
+        className="card"
       >
         <div className="flex items-center gap-5">
-          <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center">
-            <span className="text-2xl font-bold text-primary-600">
+          <div className="w-14 h-14 rounded-full bg-primary-50 flex items-center justify-center">
+            <span className="text-xl font-bold text-primary-600">
               {patient?.name.charAt(0) || "?"}
             </span>
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{patient?.name || "Unknown"}</h1>
-            <p className="text-gray-500">{patient?.email} · {patient?.phone}</p>
-            <p className="text-sm text-gray-400 mt-1">{prescriptions.length} prescriptions · {records.length} records</p>
+            <h1 className="text-xl font-bold text-gray-900">{patient?.name || "Unknown"}</h1>
+            <p className="text-sm text-gray-400">
+              {patient?.email} · {patient?.phone}
+            </p>
+            <p className="text-xs text-gray-300 mt-1">
+              {prescriptions.length} prescriptions · {records.length} records
+            </p>
           </div>
         </div>
       </motion.div>
 
-      <div className="flex gap-1 border-b border-gray-200 mb-6">
+      <div className="flex gap-1 border-b border-gray-200">
         {(["prescriptions", "history"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
             className={`px-5 py-3 text-sm font-medium transition-colors border-b-2 capitalize ${
               tab === t
-                ? "border-primary-500 text-primary-500"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+                ? "border-primary-500 text-primary-600"
+                : "border-transparent text-gray-400 hover:text-gray-600"
             }`}
           >
             {t === "history" ? "Medical History" : t}
@@ -110,12 +111,12 @@ export default function PatientDetailPage() {
         {tab === "prescriptions" ? (
           <motion.div
             key="prescriptions"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
           >
             {prescriptions.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {prescriptions.map((rx, i) => (
                   <PrescriptionCard
                     key={rx.id}
@@ -127,26 +128,26 @@ export default function PatientDetailPage() {
                 ))}
               </div>
             ) : (
-              <div className="card text-center py-12">
-                <p className="text-gray-500">No prescriptions for this patient</p>
+              <div className="card text-center py-16">
+                <p className="text-gray-400">No prescriptions for this patient</p>
               </div>
             )}
           </motion.div>
         ) : (
           <motion.div
             key="history"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="space-y-6"
+            className="space-y-5"
           >
             {records.length > 0 ? (
               records.map((rec, i) => (
                 <motion.div
                   key={rec.id}
-                  initial={{ opacity: 0, x: -10 }}
+                  initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: i * 0.08 }}
                   className="border-l-2 border-primary-200 pl-6"
                 >
                   <div className="flex items-center gap-3 mb-2">
@@ -154,13 +155,13 @@ export default function PatientDetailPage() {
                     <span className="text-xs text-gray-400">{formatDate(rec.date)}</span>
                   </div>
                   <h4 className="font-semibold text-gray-900">{rec.diagnosis}</h4>
-                  <p className="text-sm text-gray-500 mt-1">By {rec.doctorName}</p>
-                  <p className="text-sm text-gray-600 mt-2">{rec.notes}</p>
+                  <p className="text-sm text-gray-400 mt-1">By {rec.doctorName}</p>
+                  <p className="text-sm text-gray-600 mt-2 leading-relaxed">{rec.notes}</p>
                 </motion.div>
               ))
             ) : (
-              <div className="card text-center py-12">
-                <p className="text-gray-500">No medical records for this patient</p>
+              <div className="card text-center py-16">
+                <p className="text-gray-400">No medical records for this patient</p>
               </div>
             )}
           </motion.div>

@@ -30,7 +30,10 @@ function getMonthlyData(prescriptions: Prescription[]) {
     const month = now.getMonth() - 5 + i;
     const count = prescriptions.filter((p) => {
       const d = new Date(p.createdAt);
-      return d.getMonth() === ((month + 12) % 12) && d.getFullYear() === (month < 0 ? now.getFullYear() - 1 : now.getFullYear());
+      return (
+        d.getMonth() === ((month + 12) % 12) &&
+        d.getFullYear() === (month < 0 ? now.getFullYear() - 1 : now.getFullYear())
+      );
     }).length;
     return { name, count };
   });
@@ -46,7 +49,6 @@ export default function DashboardPage() {
     const u = getUser();
     if (!u) return;
     setUser(u);
-
     const rx = isDoctor(u) ? getPrescriptions() : getPrescriptionsByPatient(u.id);
     setPrescriptions(rx);
     setLoading(false);
@@ -75,42 +77,48 @@ export default function DashboardPage() {
     .slice(0, 4);
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 mt-1">
+    <div className="space-y-8">
+      <div>
+        <h1 className="section-title text-2xl">Dashboard</h1>
+        <p className="section-subtitle">
           {doctor ? "Overview of your practice" : "Your prescription overview"}
         </p>
       </div>
 
-      <div className={`grid gap-6 mb-8 ${doctor ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4" : "grid-cols-1 sm:grid-cols-3"}`}>
+      <div
+        className={`grid gap-5 ${
+          doctor
+            ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4"
+            : "grid-cols-1 sm:grid-cols-3"
+        }`}
+      >
         {doctor ? (
           <>
             <StatsCard
               title="Total Patients"
               value={patients.length}
-              icon={<Users className="w-6 h-6 text-primary-500" />}
+              icon={<Users className="w-5 h-5 text-primary-500" />}
               trend={{ value: 12, label: "this month" }}
               index={0}
             />
             <StatsCard
               title="Total Prescriptions"
               value={prescriptions.length}
-              icon={<FileText className="w-6 h-6 text-blue-500" />}
+              icon={<FileText className="w-5 h-5 text-blue-500" />}
               color="#2563EB"
               index={1}
             />
             <StatsCard
-              title="Active Prescriptions"
+              title="Active"
               value={active}
-              icon={<Activity className="w-6 h-6 text-emerald-500" />}
+              icon={<Activity className="w-5 h-5 text-emerald-500" />}
               color="#10B981"
               index={2}
             />
             <StatsCard
               title="This Month"
               value={thisMonth}
-              icon={<Calendar className="w-6 h-6 text-amber-500" />}
+              icon={<Calendar className="w-5 h-5 text-amber-500" />}
               color="#F59E0B"
               trend={{ value: 8, label: "vs last month" }}
               index={3}
@@ -121,20 +129,20 @@ export default function DashboardPage() {
             <StatsCard
               title="Active Prescriptions"
               value={active}
-              icon={<Activity className="w-6 h-6 text-primary-500" />}
+              icon={<Activity className="w-5 h-5 text-primary-500" />}
               index={0}
             />
             <StatsCard
               title="Total Prescriptions"
               value={prescriptions.length}
-              icon={<FileText className="w-6 h-6 text-blue-500" />}
+              icon={<FileText className="w-5 h-5 text-blue-500" />}
               color="#2563EB"
               index={1}
             />
             <StatsCard
               title="Medical Records"
               value={getMedicalRecords(user.id).length}
-              icon={<ClipboardList className="w-6 h-6 text-amber-500" />}
+              icon={<ClipboardList className="w-5 h-5 text-amber-500" />}
               color="#F59E0B"
               index={2}
             />
@@ -143,23 +151,34 @@ export default function DashboardPage() {
       </div>
 
       {doctor && (
-        <div className="card mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Prescription Trends</h2>
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="card">
+          <h2 className="section-title mb-6">Prescription Trends</h2>
+          <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={chartData}>
               <defs>
                 <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#16735C" stopOpacity={0.2} />
+                  <stop offset="5%" stopColor="#16735C" stopOpacity={0.15} />
                   <stop offset="95%" stopColor="#16735C" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 13, fill: "#6C757D" }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 13, fill: "#6C757D" }} allowDecimals={false} />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: "#9CA3AF" }}
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: "#9CA3AF" }}
+                allowDecimals={false}
+              />
               <Tooltip
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E9ECEF",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
+                  fontSize: 13,
                 }}
               />
               <Area
@@ -175,11 +194,11 @@ export default function DashboardPage() {
       )}
 
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <h2 className="section-title mb-5">
           {doctor ? "Recent Prescriptions" : "My Recent Prescriptions"}
         </h2>
         {recent.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
             {recent.map((rx, i) => (
               <PrescriptionCard
                 key={rx.id}
@@ -191,9 +210,9 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="card text-center py-12">
-            <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No prescriptions yet</p>
+          <div className="card text-center py-16">
+            <FileText className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+            <p className="text-gray-400">No prescriptions yet</p>
           </div>
         )}
       </div>
