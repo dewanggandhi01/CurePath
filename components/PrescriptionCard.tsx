@@ -41,10 +41,11 @@ export default function PrescriptionCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.06 }}
       className={`card card-hover cursor-pointer ${style.accent}`}
+      style={{ padding: "16px 20px" }}
       onClick={() => onView(prescription.id)}
     >
-      <div className="flex items-center justify-between mb-3">
-        <span className={`badge ${style.badge}`}>
+      <div className="flex items-center justify-between mb-2">
+        <span className={`badge ${style.badge} text-[10px] px-2 py-0.5`}>
           {prescription.status}
         </span>
         <span className="text-xs" style={{ color: "var(--text-muted)" }}>
@@ -53,20 +54,20 @@ export default function PrescriptionCard({
       </div>
 
       <h3
-        className="font-semibold mb-1 leading-snug text-[15px]"
+        className="font-semibold mb-0.5 leading-snug text-[15px]"
         style={{ color: "var(--text-primary)" }}
       >
         {prescription.diagnosis}
       </h3>
-      <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>
+      <p className="text-xs mb-3" style={{ color: "var(--text-muted)" }}>
         {prescription.doctorName} → {prescription.patientName}
       </p>
 
-      <div className="flex flex-wrap gap-1.5 mb-4">
+      <div className="flex flex-wrap gap-1 mb-3">
         {prescription.medications.slice(0, 3).map((med) => (
           <span
             key={med.name}
-            className="text-[11px] px-2.5 py-1 rounded-full font-medium"
+            className="text-[10px] px-2 py-0.5 rounded-full font-medium"
             style={{
               background: "var(--bg-tertiary)",
               color: "var(--text-secondary)",
@@ -77,7 +78,7 @@ export default function PrescriptionCard({
           </span>
         ))}
         {prescription.medications.length > 3 && (
-          <span className="text-[11px] px-2 py-1" style={{ color: "var(--text-muted)" }}>
+          <span className="text-[10px] px-1.5 py-0.5" style={{ color: "var(--text-muted)" }}>
             +{prescription.medications.length - 3}
           </span>
         )}
@@ -85,13 +86,13 @@ export default function PrescriptionCard({
 
       {showActions && (
         <div
-          className="flex gap-2 pt-3"
+          className="flex gap-2 pt-2.5"
           style={{ borderTop: "1px solid var(--card-border)" }}
           onClick={(e) => e.stopPropagation()}
         >
           <button
             onClick={() => onView(prescription.id)}
-            className="btn btn-primary btn-sm flex-1"
+            className="btn btn-primary btn-sm flex-1 py-1.5 h-8 text-xs"
           >
             <Eye className="w-3.5 h-3.5" />
             View
@@ -99,7 +100,7 @@ export default function PrescriptionCard({
           {onDownload && (
             <button
               onClick={() => onDownload(prescription)}
-              className="btn btn-secondary btn-sm"
+              className="btn btn-secondary btn-sm py-1.5 h-8"
             >
               <Download className="w-3.5 h-3.5" />
             </button>

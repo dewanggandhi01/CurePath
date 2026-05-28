@@ -43,11 +43,12 @@ export default function StatsCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.08, ease: "easeOut" }}
-      className="card card-hover flex flex-col group"
+      className="card card-hover flex items-center justify-between group"
+      style={{ padding: "16px 20px" }}
     >
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center gap-4">
         <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+          className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
           style={{
             background: `linear-gradient(135deg, ${color}15, ${color}08)`,
             border: `1px solid ${color}15`,
@@ -55,45 +56,47 @@ export default function StatsCard({
         >
           {icon}
         </div>
-        {trend && (
+        <div>
+          <p
+            className="text-[11px] font-semibold tracking-wider uppercase"
+            style={{ color: "var(--text-muted)", marginBottom: "2px" }}
+          >
+            {title}
+          </p>
+          <p
+            className="text-[24px] font-bold tracking-tight leading-none"
+            style={{ color: "var(--text-primary)" }}
+          >
+            {typeof value === "number" ? (
+              <AnimatedCounter value={numericValue} />
+            ) : (
+              value
+            )}
+          </p>
+        </div>
+      </div>
+
+      {trend && (
+        <div className="flex flex-col items-end gap-1">
           <div
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold"
+            className="flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold"
             style={{
               background: trend.value >= 0 ? "rgba(22,163,74,0.08)" : "rgba(220,38,38,0.08)",
               color: trend.value >= 0 ? "#16A34A" : "#DC2626",
             }}
           >
             {trend.value >= 0 ? (
-              <TrendingUp className="w-3 h-3" />
+              <TrendingUp className="w-2.5 h-2.5" />
             ) : (
-              <TrendingDown className="w-3 h-3" />
+              <TrendingDown className="w-2.5 h-2.5" />
             )}
             {trend.value > 0 ? "+" : ""}
             {trend.value}%
           </div>
-        )}
-      </div>
-
-      <p
-        className="text-[12px] font-semibold tracking-wider uppercase mb-1"
-        style={{ color: "var(--text-muted)" }}
-      >
-        {title}
-      </p>
-      <p
-        className="text-[28px] font-extrabold tracking-tight leading-none"
-        style={{ color: "var(--text-primary)" }}
-      >
-        {typeof value === "number" ? (
-          <AnimatedCounter value={numericValue} />
-        ) : (
-          value
-        )}
-      </p>
-      {trend && (
-        <p className="text-[11px] mt-2" style={{ color: "var(--text-muted)" }}>
-          {trend.label}
-        </p>
+          <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+            {trend.label}
+          </span>
+        </div>
       )}
     </motion.div>
   );
