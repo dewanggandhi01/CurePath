@@ -64,8 +64,8 @@ export default function StatsCard({
             {title}
           </p>
           <p
-            className="text-[24px] font-bold tracking-tight leading-none"
-            style={{ color: "var(--text-primary)" }}
+            className="text-[32px] font-extrabold tracking-tight leading-none"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
           >
             {typeof value === "number" ? (
               <AnimatedCounter value={numericValue} />
