@@ -2,10 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { Plus, FileText } from "lucide-react";
 import PrescriptionCard from "@/components/PrescriptionCard";
 import PrescriptionForm from "@/components/PrescriptionForm";
 import SearchFilter from "@/components/SearchFilter";
+import { SkeletonPrescriptionCards } from "@/components/Skeleton";
+import { useToast } from "@/components/Toast";
 import { getUser, isDoctor, DEMO_USERS, type User } from "@/lib/auth";
 import {
   getPrescriptions,
@@ -20,6 +23,7 @@ import { generatePrescriptionPDF } from "@/lib/pdf";
 
 export default function PrescriptionsPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [filtered, setFiltered] = useState<Prescription[]>([]);
@@ -40,7 +44,7 @@ export default function PrescriptionsPage() {
     if (!u) return;
     setUser(u);
     loadData(u);
-    setLoading(false);
+    setTimeout(() => setLoading(false), 300);
   }, [loadData]);
 
   const handleSearch = (q: string) => {
@@ -58,17 +62,28 @@ export default function PrescriptionsPage() {
   ) => {
     if (editing) {
       updatePrescription(editing.id, data);
+      toast("success", "Prescription Updated", `Updated prescription for ${data.patientName}`);
     } else {
       createPrescription({ ...data, doctorId: user!.id, doctorName: user!.name });
+      toast("success", "Prescription Created", `New prescription for ${data.patientName}`);
     }
     loadData(user!);
     setEditing(null);
   };
 
+  const handleDownload = (rx: Prescription) => {
+    generatePrescriptionPDF(rx);
+    toast("success", "PDF Downloaded", `Prescription for ${rx.patientName} saved`);
+  };
+
   if (loading || !user) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="spinner" />
+      <div className="space-y-6">
+        <div>
+          <div className="skeleton skeleton-heading" />
+          <div className="skeleton skeleton-text" style={{ width: "200px" }} />
+        </div>
+        <SkeletonPrescriptionCards count={6} />
       </div>
     );
   }
@@ -105,16 +120,21 @@ export default function PrescriptionsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="section-title text-2xl">
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
             {doctor ? "Prescriptions" : "My Prescriptions"}
           </h1>
-          <p className="section-subtitle">
-            {doctor ? "Manage all prescriptions" : "View your prescriptions"}
+          <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
+            {doctor ? "Manage all prescriptions" : "View your prescriptions"}{" "}
+            <span className="font-medium" style={{ color: "var(--text-secondary)" }}>
+              · {prescriptions.length} total
+            </span>
           </p>
-        </div>
+        </motion.div>
         {doctor && (
-          <button
+          <motion.button
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             onClick={() => {
               setEditing(null);
               setIsFormOpen(true);
@@ -123,7 +143,7 @@ export default function PrescriptionsPage() {
           >
             <Plus className="w-4 h-4" />
             New Prescription
-          </button>
+          </motion.button>
         )}
       </div>
 
@@ -140,16 +160,16 @@ export default function PrescriptionsPage() {
               key={rx.id}
               prescription={rx}
               onView={(id) => router.push(`/dashboard/prescriptions/${id}`)}
-              onDownload={generatePrescriptionPDF}
+              onDownload={handleDownload}
               index={i}
             />
           ))}
         </div>
       ) : (
-        <div className="card text-center py-20">
-          <FileText className="w-14 h-14 text-gray-200 mx-auto mb-4" />
-          <p className="text-lg text-gray-400 font-medium">No prescriptions found</p>
-          <p className="text-sm text-gray-300 mt-1">Try adjusting your search or filters</p>
+        <div className="card empty-state">
+          <FileText className="empty-state-icon mx-auto" />
+          <p className="empty-state-title">No prescriptions found</p>
+          <p className="empty-state-text">Try adjusting your search or filters</p>
         </div>
       )}
 

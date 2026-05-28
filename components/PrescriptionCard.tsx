@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import { Eye, Download } from "lucide-react";
 import type { Prescription } from "@/lib/data";
 
-const statusStyles: Record<string, string> = {
-  active: "badge-active",
-  completed: "badge-completed",
-  expired: "badge-expired",
+const statusStyles: Record<string, { badge: string; accent: string }> = {
+  active: { badge: "badge-active", accent: "card-accent-green" },
+  completed: { badge: "badge-completed", accent: "card-accent-blue" },
+  expired: { badge: "badge-expired", accent: "card-accent-gray" },
 };
 
 function formatDate(iso: string): string {
@@ -33,27 +33,32 @@ export default function PrescriptionCard({
   showActions = true,
   index = 0,
 }: PrescriptionCardProps) {
+  const style = statusStyles[prescription.status] || statusStyles.active;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.06 }}
-      className="card card-hover cursor-pointer"
+      className={`card card-hover cursor-pointer ${style.accent}`}
       onClick={() => onView(prescription.id)}
     >
       <div className="flex items-center justify-between mb-3">
-        <span className={`badge ${statusStyles[prescription.status]}`}>
+        <span className={`badge ${style.badge}`}>
           {prescription.status}
         </span>
-        <span className="text-xs text-gray-400">
+        <span className="text-xs" style={{ color: "var(--text-muted)" }}>
           {formatDate(prescription.createdAt)}
         </span>
       </div>
 
-      <h3 className="font-semibold text-gray-900 mb-1 leading-snug">
+      <h3
+        className="font-semibold mb-1 leading-snug text-[15px]"
+        style={{ color: "var(--text-primary)" }}
+      >
         {prescription.diagnosis}
       </h3>
-      <p className="text-sm text-gray-400 mb-4">
+      <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>
         {prescription.doctorName} → {prescription.patientName}
       </p>
 
@@ -61,13 +66,18 @@ export default function PrescriptionCard({
         {prescription.medications.slice(0, 3).map((med) => (
           <span
             key={med.name}
-            className="text-[11px] bg-gray-50 text-gray-500 px-2.5 py-1 rounded-full border border-gray-100"
+            className="text-[11px] px-2.5 py-1 rounded-full font-medium"
+            style={{
+              background: "var(--bg-tertiary)",
+              color: "var(--text-secondary)",
+              border: "1px solid var(--card-border)",
+            }}
           >
             {med.name}
           </span>
         ))}
         {prescription.medications.length > 3 && (
-          <span className="text-[11px] text-gray-400 px-2 py-1">
+          <span className="text-[11px] px-2 py-1" style={{ color: "var(--text-muted)" }}>
             +{prescription.medications.length - 3}
           </span>
         )}
@@ -75,7 +85,8 @@ export default function PrescriptionCard({
 
       {showActions && (
         <div
-          className="flex gap-2 pt-3 border-t border-gray-100"
+          className="flex gap-2 pt-3"
+          style={{ borderTop: "1px solid var(--card-border)" }}
           onClick={(e) => e.stopPropagation()}
         >
           <button

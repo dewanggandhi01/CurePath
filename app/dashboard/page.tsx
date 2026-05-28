@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { Users, FileText, Activity, Calendar, ClipboardList } from "lucide-react";
 import {
   AreaChart,
@@ -10,9 +11,12 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
 import StatsCard from "@/components/StatsCard";
 import PrescriptionCard from "@/components/PrescriptionCard";
+import { SkeletonDashboard } from "@/components/Skeleton";
+import { useToast } from "@/components/Toast";
 import { getUser, isDoctor, type User } from "@/lib/auth";
 import {
   getPrescriptions,
@@ -39,8 +43,25 @@ function getMonthlyData(prescriptions: Prescription[]) {
   });
 }
 
+function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div style={{
+      background: "var(--card-bg)",
+      border: "1px solid var(--card-border)",
+      borderRadius: "var(--radius-md)",
+      padding: "10px 14px",
+      boxShadow: "var(--shadow-md)",
+    }}>
+      <p className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>{label}</p>
+      <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{payload[0].value} prescriptions</p>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,15 +72,12 @@ export default function DashboardPage() {
     setUser(u);
     const rx = isDoctor(u) ? getPrescriptions() : getPrescriptionsByPatient(u.id);
     setPrescriptions(rx);
-    setLoading(false);
+    // Small delay for skeleton effect
+    setTimeout(() => setLoading(false), 400);
   }, []);
 
   if (loading || !user) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="spinner" />
-      </div>
-    );
+    return <SkeletonDashboard />;
   }
 
   const doctor = isDoctor(user);
@@ -76,15 +94,37 @@ export default function DashboardPage() {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 4);
 
+  const handleDownload = (rx: Prescription) => {
+    generatePrescriptionPDF(rx);
+    toast("success", "PDF Downloaded", `Prescription for ${rx.patientName} downloaded`);
+  };
+
+  const greeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    return "Good evening";
+  };
+
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="section-title text-2xl">Dashboard</h1>
-        <p className="section-subtitle">
-          {doctor ? "Overview of your practice" : "Your prescription overview"}
+      {/* Welcome Banner */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
+          {greeting()}, {user.name.split(" ")[0]} 👋
+        </h1>
+        <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
+          {doctor
+            ? `Here's an overview of your practice · ${new Date().toLocaleDateString("en-IN", { weekday: "long", month: "long", day: "numeric" })}`
+            : `Your prescription overview · ${new Date().toLocaleDateString("en-IN", { weekday: "long", month: "long", day: "numeric" })}`}
         </p>
-      </div>
+      </motion.div>
 
+      {/* Stats Grid */}
       <div
         className={`grid gap-5 ${
           doctor
@@ -97,7 +137,7 @@ export default function DashboardPage() {
             <StatsCard
               title="Total Patients"
               value={patients.length}
-              icon={<Users className="w-5 h-5 text-primary-500" />}
+              icon={<Users className="w-5 h-5" style={{ color: "var(--color-primary-500)" }} />}
               trend={{ value: 12, label: "this month" }}
               index={0}
             />
@@ -129,7 +169,7 @@ export default function DashboardPage() {
             <StatsCard
               title="Active Prescriptions"
               value={active}
-              icon={<Activity className="w-5 h-5 text-primary-500" />}
+              icon={<Activity className="w-5 h-5" style={{ color: "var(--color-primary-500)" }} />}
               index={0}
             />
             <StatsCard
@@ -150,53 +190,74 @@ export default function DashboardPage() {
         )}
       </div>
 
+      {/* Chart Section */}
       {doctor && (
-        <div className="card">
-          <h2 className="section-title mb-6">Prescription Trends</h2>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+          className="card"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="section-title">Prescription Trends</h2>
+              <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>Last 6 months overview</p>
+            </div>
+          </div>
           <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={chartData}>
               <defs>
                 <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#16735C" stopOpacity={0.15} />
+                  <stop offset="5%" stopColor="#16735C" stopOpacity={0.2} />
                   <stop offset="95%" stopColor="#16735C" stopOpacity={0} />
                 </linearGradient>
               </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" vertical={false} />
               <XAxis
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fill: "#9CA3AF" }}
+                tick={{ fontSize: 12, fill: "var(--text-muted)" }}
               />
               <YAxis
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fill: "#9CA3AF" }}
+                tick={{ fontSize: 12, fill: "var(--text-muted)" }}
                 allowDecimals={false}
               />
-              <Tooltip
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E9ECEF",
-                  boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
-                  fontSize: 13,
-                }}
-              />
+              <Tooltip content={<CustomTooltip />} />
               <Area
                 type="monotone"
                 dataKey="count"
                 stroke="#16735C"
-                strokeWidth={2}
+                strokeWidth={2.5}
                 fill="url(#colorCount)"
+                dot={{ r: 4, fill: "#16735C", stroke: "var(--card-bg)", strokeWidth: 2 }}
+                activeDot={{ r: 6, fill: "#16735C", stroke: "var(--card-bg)", strokeWidth: 3 }}
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
       )}
 
-      <div>
-        <h2 className="section-title mb-5">
-          {doctor ? "Recent Prescriptions" : "My Recent Prescriptions"}
-        </h2>
+      {/* Recent Prescriptions */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.4 }}
+      >
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="section-title">
+            {doctor ? "Recent Prescriptions" : "My Recent Prescriptions"}
+          </h2>
+          <button
+            onClick={() => router.push("/dashboard/prescriptions")}
+            className="btn btn-ghost btn-sm text-xs"
+            style={{ color: "var(--color-primary-500)" }}
+          >
+            View all →
+          </button>
+        </div>
         {recent.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
             {recent.map((rx, i) => (
@@ -204,18 +265,19 @@ export default function DashboardPage() {
                 key={rx.id}
                 prescription={rx}
                 onView={(id) => router.push(`/dashboard/prescriptions/${id}`)}
-                onDownload={generatePrescriptionPDF}
+                onDownload={handleDownload}
                 index={i}
               />
             ))}
           </div>
         ) : (
-          <div className="card text-center py-16">
-            <FileText className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-            <p className="text-gray-400">No prescriptions yet</p>
+          <div className="card empty-state">
+            <FileText className="empty-state-icon mx-auto" />
+            <p className="empty-state-title">No prescriptions yet</p>
+            <p className="empty-state-text">Prescriptions will appear here once created</p>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }
