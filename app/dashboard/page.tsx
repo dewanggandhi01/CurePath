@@ -169,16 +169,11 @@ export default function DashboardPage() {
         </div>
       </motion.div>
 
-      {/* Stats Grid */}
-      <div
-        className={`grid gap-4 ${
-          doctor
-            ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4"
-            : "grid-cols-1 sm:grid-cols-3"
-        }`}
-      >
-        {doctor ? (
-          <>
+      {/* Stats and Graph Side-by-Side Section */}
+      {doctor ? (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          {/* Left Side: KPI Cards (2x2 Grid) */}
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <StatsCard
               title="Total Patients"
               value={patients.length}
@@ -208,53 +203,25 @@ export default function DashboardPage() {
               trend={{ value: 8, label: "vs last month" }}
               index={3}
             />
-          </>
-        ) : (
-          <>
-            <StatsCard
-              title="Active Prescriptions"
-              value={active}
-              icon={<Activity className="w-4.5 h-4.5" style={{ color: "var(--color-primary-500)" }} />}
-              index={0}
-            />
-            <StatsCard
-              title="Total Prescriptions"
-              value={prescriptions.length}
-              icon={<FileText className="w-4.5 h-4.5 text-blue-500" />}
-              color="#2563EB"
-              index={1}
-            />
-            <StatsCard
-              title="Medical Records"
-              value={getMedicalRecords(user.id).length}
-              icon={<ClipboardList className="w-4.5 h-4.5 text-amber-500" />}
-              color="#F59E0B"
-              index={2}
-            />
-          </>
-        )}
-      </div>
+          </div>
 
-      {/* Main Asymmetric Content Layout */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        
-        {/* Left Columns (Analytics & Recent Items) */}
-        <div className="xl:col-span-2 space-y-6">
-          {doctor && (
+          {/* Right Side: Analytics Graph */}
+          <div className="lg:col-span-7 flex flex-col justify-between">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="card"
+              className="card h-full flex flex-col justify-between"
               style={{
                 background: "var(--card-bg-glass)",
                 backdropFilter: "blur(16px)",
                 WebkitBackdropFilter: "blur(16px)",
+                padding: "20px",
               }}
             >
-              <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
                 <div>
                   <h2 className="section-title">Prescription Analytics</h2>
-                  <p className="text-xs" style={{ color: "var(--text-secondary)" }}>Practice metrics and issuing flow</p>
+                  <p className="text-[11px]" style={{ color: "var(--text-secondary)" }}>Practice metrics and issuing flow</p>
                 </div>
                 
                 {/* Advanced Chart Controls */}
@@ -263,7 +230,7 @@ export default function DashboardPage() {
                     <button
                       key={r}
                       onClick={() => setTimeRange(r)}
-                      className={`px-2.5 py-1 text-[10px] font-bold rounded-md uppercase transition-all ${
+                      className={`px-2.5 py-0.5 text-[9px] font-bold rounded-md uppercase transition-all ${
                         timeRange === r
                           ? "bg-white dark:bg-gray-800 shadow-sm text-primary-600 font-bold"
                           : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
@@ -275,42 +242,75 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <ResponsiveContainer width="100%" height={210}>
-                <AreaChart data={chartData} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--color-primary-500)" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="var(--color-primary-500)" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="4 4" stroke="var(--card-border)" vertical={false} />
-                  <XAxis
-                    dataKey="name"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fontSize: 11, fill: "var(--text-secondary)" }}
-                  />
-                  <YAxis
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fontSize: 11, fill: "var(--text-secondary)" }}
-                    allowDecimals={false}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Area
-                    type="monotone"
-                    dataKey="count"
-                    stroke="var(--color-primary-500)"
-                    strokeWidth={2}
-                    fill="url(#colorCount)"
-                    dot={{ r: 3, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 1.5 }}
-                    activeDot={{ r: 5, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 2 }}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+              <div className="flex-1 min-h-[160px] flex items-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={chartData} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--color-primary-500)" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="var(--color-primary-500)" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="4 4" stroke="var(--card-border)" vertical={false} />
+                    <XAxis
+                      dataKey="name"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 10, fill: "var(--text-secondary)" }}
+                    />
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 10, fill: "var(--text-secondary)" }}
+                      allowDecimals={false}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area
+                      type="monotone"
+                      dataKey="count"
+                      stroke="var(--color-primary-500)"
+                      strokeWidth={2}
+                      fill="url(#colorCount)"
+                      dot={{ r: 3, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 1.5 }}
+                      activeDot={{ r: 5, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 2 }}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </motion.div>
-          )}
+          </div>
+        </div>
+      ) : (
+        /* Patient view stats - normal 3-column span, no chart */
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <StatsCard
+            title="Active Prescriptions"
+            value={active}
+            icon={<Activity className="w-4.5 h-4.5" style={{ color: "var(--color-primary-500)" }} />}
+            index={0}
+          />
+          <StatsCard
+            title="Total Prescriptions"
+            value={prescriptions.length}
+            icon={<FileText className="w-4.5 h-4.5 text-blue-500" />}
+            color="#2563EB"
+            index={1}
+          />
+          <StatsCard
+            title="Medical Records"
+            value={getMedicalRecords(user.id).length}
+            icon={<ClipboardList className="w-4.5 h-4.5 text-amber-500" />}
+            color="#F59E0B"
+            index={2}
+          />
+        </div>
+      )}
 
+      {/* Main Asymmetric Content Layout */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        
+        {/* Left Columns (Recent Items) */}
+        <div className="xl:col-span-2 space-y-6">
           {/* Recent list layout */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
