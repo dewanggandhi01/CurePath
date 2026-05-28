@@ -747,3 +747,13 @@ input, select, textarea, button {
   font-size: 14px;
   color: var(--text-muted);
 }
+
+/* ========== MAIN CONTENT SPACING ========== */
+.main-content {
+  padding-top: var(--navbar-height);
+  min-height: calc(100vh - var(--navbar-height));
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}

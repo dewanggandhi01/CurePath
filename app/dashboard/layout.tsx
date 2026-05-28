@@ -46,7 +46,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <ToastProvider>
       <div className="min-h-screen" style={{ background: "var(--bg-secondary)" }}>
         <Navbar user={user!} onLogout={handleLogout} />
-        <main className="pt-[72px]">
+        <main className="main-content">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}

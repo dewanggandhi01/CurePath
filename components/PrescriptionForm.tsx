@@ -108,7 +108,7 @@ export default function PrescriptionForm({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 glass"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 glass"
           style={{ background: "var(--modal-overlay)" }}
           onClick={onClose}
         >
