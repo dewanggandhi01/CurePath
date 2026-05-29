@@ -55,7 +55,7 @@ export default function Navbar({
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full flex justify-center"
         style={{
           paddingTop: "10px",
           background: "transparent",
@@ -65,7 +65,7 @@ export default function Navbar({
           className="mx-auto max-w-[1440px] px-6 md:px-8 h-[64px] flex items-center justify-between transition-all duration-300 border"
           style={{
             width: "calc(100% - 32px)",
-            borderRadius: "16px",
+            borderRadius: "0px",
             background: "var(--navbar-bg-glass)",
             backdropFilter: "blur(18px)",
             WebkitBackdropFilter: "blur(18px)",

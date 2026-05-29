@@ -234,7 +234,7 @@ export default function PatientDetailPage() {
                       style={{ borderColor: "var(--color-primary-500)" }}
                     />
                     
-                    <div className="card card-hover" style={{ padding: 20 }}>
+                    <div className="card card-hover" style={{ padding: "32px 24px" }}>
                       <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
                         <div className="flex items-center gap-2">
                           <span className="badge badge-active text-xs capitalize">

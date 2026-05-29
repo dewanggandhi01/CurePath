@@ -247,7 +247,7 @@ export default function PrescriptionDetailPage() {
 
         {/* Medications Table */}
         <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-          <div style={{ padding: "20px 24px 16px" }}>
+          <div style={{ padding: "32px 24px 20px" }}>
             <h3 className="font-semibold text-[15px]" style={{ color: "var(--text-primary)" }}>
               Medications ({rx.medications.length})
             </h3>

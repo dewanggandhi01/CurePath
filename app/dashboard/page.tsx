@@ -215,7 +215,7 @@ export default function DashboardPage() {
                 background: "var(--card-bg-glass)",
                 backdropFilter: "blur(16px)",
                 WebkitBackdropFilter: "blur(16px)",
-                padding: "20px",
+                padding: "32px 24px",
               }}
             >
               <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
@@ -359,7 +359,7 @@ export default function DashboardPage() {
             initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
             className="card"
-            style={{ padding: 20 }}
+            style={{ padding: "32px 24px" }}
           >
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-4 h-4 text-emerald-500" />
@@ -387,7 +387,7 @@ export default function DashboardPage() {
             initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
             className="card"
-            style={{ padding: 20 }}
+            style={{ padding: "32px 24px" }}
           >
             <div className="flex items-center gap-2 mb-4">
               <Clock className="w-4 h-4 text-blue-500" />

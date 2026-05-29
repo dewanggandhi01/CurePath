@@ -152,7 +152,7 @@ export default function HistoryPage() {
                     style={{ borderColor: "var(--color-primary-500)" }}
                   />
 
-                  <div className="card card-hover" style={{ padding: 20 }}>
+                  <div className="card card-hover" style={{ padding: "32px 24px" }}>
                     <div className="flex flex-wrap items-center justify-between gap-2.5 mb-3">
                       <div className="flex items-center gap-2">
                         <span className={`badge ${cfg.badgeClass} flex items-center gap-1 text-[11px]`}>

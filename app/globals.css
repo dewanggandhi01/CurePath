@@ -79,16 +79,16 @@
   --transition-slow: 400ms ease;
   --transition-spring: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --input-height: 48px;
-  --input-radius: 12px;
+  --input-height: 52px;
+  --input-radius: 0px;
   --navbar-height: 72px;
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 24px;
-  --radius-full: 999px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-full: 0px;
 }
 
 /* ========== DARK MODE TOKENS ========== */
@@ -208,7 +208,7 @@ input, select, textarea, button {
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--color-gray-300); border-radius: 999px; }
+::-webkit-scrollbar-thumb { background: var(--color-gray-300); border-radius: 0px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-gray-400); }
 
 /* ========== CONTAINER ========== */
@@ -300,13 +300,13 @@ svg, svg.lucide {
   justify-content: center;
   gap: 8px;
   font-weight: 600;
-  border-radius: 14px;
+  border-radius: 0px;
   transition: all 0.25s ease;
   cursor: pointer;
   border: none;
   font-size: 14px;
-  height: 44px;
-  padding: 0 20px;
+  height: 48px;
+  padding: 0 24px;
   line-height: 1.4;
   position: relative;
   overflow: hidden;
@@ -337,7 +337,7 @@ svg, svg.lucide {
   background: var(--card-bg);
   color: var(--color-primary-500);
   border: 1.5px solid var(--color-gray-200);
-  height: 44px;
+  height: 48px;
 }
 
 .btn-secondary:hover {
@@ -357,10 +357,10 @@ svg, svg.lucide {
 }
 
 .btn-sm {
-  height: 34px;
-  padding: 0 14px;
+  height: 38px;
+  padding: 0 16px;
   font-size: 13px;
-  border-radius: 10px;
+  border-radius: 0px;
 }
 
 .btn-ghost {
@@ -389,7 +389,7 @@ svg, svg.lucide {
 
 /* ========== CARDS ========== */
 .card {
-  padding: 24px;
+  padding: 32px 24px;
   border-radius: var(--radius-xl);
   background: var(--card-bg);
   box-shadow:
@@ -795,4 +795,17 @@ svg, svg.lucide {
   width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+/* ========== ENFORCE COMPLETELY SHARP CORNERS GLOBALLY ========== */
+*, *::before, *::after {
+  border-radius: 0px !important;
+}
+
+/* Exempt spinning loading graphics from being made square */
+.animate-spin,
+[class*="animate-spin"],
+.spinner,
+[class*="spinner"] {
+  border-radius: 50% !important;
 }

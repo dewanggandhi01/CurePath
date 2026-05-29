@@ -44,7 +44,7 @@ export default function StatsCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.08, ease: "easeOut" }}
       className="card card-hover flex items-center justify-between group"
-      style={{ padding: "16px 20px" }}
+      style={{ padding: "28px 24px" }}
     >
       <div className="flex items-center gap-4">
         <div

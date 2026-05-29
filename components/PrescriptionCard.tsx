@@ -41,7 +41,7 @@ export default function PrescriptionCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.06 }}
       className={`card card-hover cursor-pointer ${style.accent}`}
-      style={{ padding: "16px 20px" }}
+      style={{ padding: "28px 24px" }}
       onClick={() => onView(prescription.id)}
     >
       <div className="flex items-center justify-between mb-2">

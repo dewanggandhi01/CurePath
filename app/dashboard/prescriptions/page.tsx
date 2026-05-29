@@ -329,7 +329,7 @@ export default function PrescriptionsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   className="card relative overflow-hidden border-l-[4px] border-emerald-500"
                   style={{
-                    padding: "24px",
+                    padding: "32px 24px",
                     background: "linear-gradient(135deg, var(--card-bg) 0%, rgba(16, 185, 129, 0.02) 100%)",
                   }}
                 >
@@ -439,7 +439,7 @@ export default function PrescriptionsPage() {
             </h3>
 
             {/* AI suggestions / refinement status */}
-            <div className="card space-y-4" style={{ padding: "20px" }}>
+            <div className="card space-y-4" style={{ padding: "32px 24px" }}>
               <div className="flex items-center gap-2 text-emerald-500">
                 <Sparkles className="w-4 h-4 animate-pulse" />
                 <h4 className="font-bold text-xs uppercase tracking-wider">Adherence Assistant</h4>
@@ -473,7 +473,7 @@ export default function PrescriptionsPage() {
             </div>
 
             {/* Quick Actions Card */}
-            <div className="card space-y-3" style={{ padding: "20px" }}>
+            <div className="card space-y-3" style={{ padding: "32px 24px" }}>
               <h4 className="font-bold text-xs uppercase tracking-wider" style={{ color: "var(--text-primary)" }}>Refill Insights</h4>
               <div className="text-[11px] flex justify-between py-1 border-b" style={{ borderColor: "var(--card-border)" }}>
                 <span style={{ color: "var(--text-secondary)" }}>Refill Adherence</span>
