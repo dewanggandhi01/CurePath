@@ -154,155 +154,225 @@ export default function DashboardPage() {
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center text-center justify-center gap-4 pb-4 border-b"
+        className="flex flex-col items-center text-center justify-center gap-2 pb-5 border-b"
         style={{ borderColor: "var(--card-border)" }}
       >
         <div className="flex flex-col items-center">
           <h1 className="text-3xl font-bold tracking-tight" style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}>
-            {greeting()}, {user.name.split(" ")[0]} 👋
+            Prescription Analytics Overview
           </h1>
-          <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
-            {doctor
-              ? `Your clinic statistics overview · ${new Date().toLocaleDateString("en-IN", { weekday: "short", month: "short", day: "numeric" })}`
-              : `Your medical panel summary · ${new Date().toLocaleDateString("en-IN", { weekday: "short", month: "short", day: "numeric" })}`}
+          <p className="text-sm mt-1 uppercase font-bold tracking-widest text-emerald-600 dark:text-emerald-400">
+            Revenue | Patients | Growth | Prescriptions
           </p>
         </div>
       </motion.div>
 
       {/* Stats and Graph Side-by-Side Section */}
       {doctor ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-          {/* Left Side: KPI Cards (2x2 Grid) */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <StatsCard
-              title="Total Patients"
-              value={patients.length}
-              icon={<Users className="w-4.5 h-4.5" style={{ color: "var(--color-primary-500)" }} />}
-              trend={{ value: 12, label: "this month" }}
-              index={0}
-            />
-            <StatsCard
-              title="Total Issued"
-              value={prescriptions.length}
-              icon={<FileText className="w-4.5 h-4.5 text-blue-500" />}
-              color="#2563EB"
-              index={1}
-            />
-            <StatsCard
-              title="Active Cases"
-              value={active}
-              icon={<Activity className="w-4.5 h-4.5 text-emerald-500" />}
-              color="#10B981"
-              index={2}
-            />
-            <StatsCard
-              title="Issued This Month"
-              value={thisMonth}
-              icon={<Calendar className="w-4.5 h-4.5 text-amber-500" />}
-              color="#F59E0B"
-              trend={{ value: 8, label: "vs last month" }}
-              index={3}
-            />
-          </div>
-
-          {/* Right Side: Analytics Graph */}
-          <div className="lg:col-span-7 flex flex-col justify-between">
+        <div className="dashboard-grid">
+          {/* Left Side: Metric/KPI Cards in a 2x2 grid */}
+          <div className="metrics-grid">
+            {/* Total Patients */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="card h-full flex flex-col justify-between"
-              style={{
-                background: "var(--card-bg-glass)",
-                backdropFilter: "blur(16px)",
-                WebkitBackdropFilter: "blur(16px)",
-                padding: "32px 24px",
-              }}
+              transition={{ duration: 0.3, delay: 0 }}
+              className="metric-card rounded-exempt"
             >
-              <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
-                <div>
-                  <h2 className="section-title">Prescription Analytics</h2>
-                  <p className="text-[11px]" style={{ color: "var(--text-secondary)" }}>Practice metrics and issuing flow</p>
+              <div className="metric-header">
+                <div className="metric-icon">
+                  <Users className="w-5.5 h-5.5" />
                 </div>
-                
-                {/* Advanced Chart Controls */}
-                <div className="flex rounded-lg p-0.5" style={{ background: "var(--bg-tertiary)", border: "1px solid var(--card-border)" }}>
-                  {(["7d", "30d", "6m", "1y"] as const).map((r) => (
-                    <button
-                      key={r}
-                      onClick={() => setTimeRange(r)}
-                      className={`px-2.5 py-0.5 text-[9px] font-bold rounded-md uppercase transition-all ${
-                        timeRange === r
-                          ? "bg-white dark:bg-gray-800 shadow-sm text-primary-600 font-bold"
-                          : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                      }`}
-                    >
-                      {r}
-                    </button>
-                  ))}
-                </div>
+                <div className="growth positive">+12%</div>
               </div>
+              <h3>{patients.length}</h3>
+              <p>Total Patients</p>
+            </motion.div>
 
-              <div className="flex-1 min-h-[160px] flex items-center">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={chartData} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="var(--color-primary-500)" stopOpacity={0.15} />
-                        <stop offset="95%" stopColor="var(--color-primary-500)" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="4 4" stroke="var(--card-border)" vertical={false} />
-                    <XAxis
-                      dataKey="name"
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fontSize: 10, fill: "var(--text-secondary)" }}
-                    />
-                    <YAxis
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fontSize: 10, fill: "var(--text-secondary)" }}
-                      allowDecimals={false}
-                    />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Area
-                      type="monotone"
-                      dataKey="count"
-                      stroke="var(--color-primary-500)"
-                      strokeWidth={2}
-                      fill="url(#colorCount)"
-                      dot={{ r: 3, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 1.5 }}
-                      activeDot={{ r: 5, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 2 }}
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+            {/* Total Issued */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.06 }}
+              className="metric-card rounded-exempt"
+            >
+              <div className="metric-header">
+                <div className="metric-icon" style={{ background: "rgba(37, 99, 235, 0.08)", color: "#2563eb" }}>
+                  <FileText className="w-5.5 h-5.5" />
+                </div>
+                <div className="growth positive">+8%</div>
               </div>
+              <h3>{prescriptions.length}</h3>
+              <p>Total Issued</p>
+            </motion.div>
+
+            {/* Active Cases */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.12 }}
+              className="metric-card rounded-exempt"
+            >
+              <div className="metric-header">
+                <div className="metric-icon" style={{ background: "rgba(16, 185, 129, 0.08)", color: "#10b981" }}>
+                  <Activity className="w-5.5 h-5.5" />
+                </div>
+                <div className="growth positive">+5%</div>
+              </div>
+              <h3>{active}</h3>
+              <p>Active Cases</p>
+            </motion.div>
+
+            {/* Issued This Month */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.18 }}
+              className="metric-card rounded-exempt"
+            >
+              <div className="metric-header">
+                <div className="metric-icon" style={{ background: "rgba(245, 158, 11, 0.08)", color: "#d97706" }}>
+                  <Calendar className="w-5.5 h-5.5" />
+                </div>
+                <div className="growth positive">+15%</div>
+              </div>
+              <h3>{thisMonth}</h3>
+              <p>Issued This Month</p>
             </motion.div>
           </div>
+
+          {/* Right Side: Redesigned Analytics Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.24 }}
+            className="analytics-card rounded-exempt"
+          >
+            {/* Analytics Header */}
+            <div className="analytics-header">
+              <div>
+                <h2>Prescription Analytics</h2>
+                <p>Practice metrics and issuing flow</p>
+              </div>
+              <select
+                value={timeRange}
+                onChange={(e) => setTimeRange(e.target.value as any)}
+                className="rounded-exempt"
+              >
+                <option value="6m">Last 6 Months</option>
+                <option value="30d">Last 30 Days</option>
+                <option value="7d">Last 7 Days</option>
+                <option value="1y">Last Year</option>
+              </select>
+            </div>
+
+            {/* Statistics Above Chart */}
+            <div className="analytics-stats">
+              <div className="analytics-stats-item">
+                <span>Total Prescriptions</span>
+                <h3>{prescriptions.length}</h3>
+              </div>
+              <div className="analytics-stats-item">
+                <span>Growth</span>
+                <h3>+12%</h3>
+              </div>
+              <div className="analytics-stats-item">
+                <span>Active Cases</span>
+                <h3>{active}</h3>
+              </div>
+            </div>
+
+            {/* Chart Area */}
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-primary-500)" stopOpacity={0.15} />
+                      <stop offset="95%" stopColor="var(--color-primary-500)" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="4 4" stroke="var(--card-border)" vertical={false} />
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 10, fill: "var(--text-secondary)" }}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fontSize: 10, fill: "var(--text-secondary)" }}
+                    allowDecimals={false}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area
+                    type="monotone"
+                    dataKey="count"
+                    stroke="var(--color-primary-500)"
+                    strokeWidth={2}
+                    fill="url(#colorCount)"
+                    dot={{ r: 3, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 1.5 }}
+                    activeDot={{ r: 5, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 2 }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </motion.div>
         </div>
       ) : (
         /* Patient view stats - normal 3-column span, no chart */
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <StatsCard
-            title="Active Prescriptions"
-            value={active}
-            icon={<Activity className="w-4.5 h-4.5" style={{ color: "var(--color-primary-500)" }} />}
-            index={0}
-          />
-          <StatsCard
-            title="Total Prescriptions"
-            value={prescriptions.length}
-            icon={<FileText className="w-4.5 h-4.5 text-blue-500" />}
-            color="#2563EB"
-            index={1}
-          />
-          <StatsCard
-            title="Medical Records"
-            value={getMedicalRecords(user.id).length}
-            icon={<ClipboardList className="w-4.5 h-4.5 text-amber-500" />}
-            color="#F59E0B"
-            index={2}
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          {/* Active Prescriptions */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0 }}
+            className="metric-card rounded-exempt"
+          >
+            <div className="metric-header">
+              <div className="metric-icon">
+                <Activity className="w-5.5 h-5.5" />
+              </div>
+              <div className="growth positive">Active</div>
+            </div>
+            <h3>{active}</h3>
+            <p>Active Prescriptions</p>
+          </motion.div>
+
+          {/* Total Prescriptions */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.06 }}
+            className="metric-card rounded-exempt"
+          >
+            <div className="metric-header">
+              <div className="metric-icon" style={{ background: "rgba(37, 99, 235, 0.08)", color: "#2563eb" }}>
+                <FileText className="w-5.5 h-5.5" />
+              </div>
+              <div className="growth positive">Total</div>
+            </div>
+            <h3>{prescriptions.length}</h3>
+            <p>Total Prescriptions</p>
+          </motion.div>
+
+          {/* Medical Records */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.12 }}
+            className="metric-card rounded-exempt"
+          >
+            <div className="metric-header">
+              <div className="metric-icon" style={{ background: "rgba(245, 158, 11, 0.08)", color: "#d97706" }}>
+                <ClipboardList className="w-5.5 h-5.5" />
+              </div>
+              <div className="growth positive">Records</div>
+            </div>
+            <h3>{getMedicalRecords(user.id).length}</h3>
+            <p>Medical Records</p>
+          </motion.div>
         </div>
       )}
 

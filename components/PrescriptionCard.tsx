@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Stethoscope, User, Download, ArrowRight } from "lucide-react";
 import type { Prescription } from "@/lib/data";
 
 function formatDate(iso: string): string {
@@ -26,6 +27,9 @@ export default function PrescriptionCard({
   showActions = true,
   index = 0,
 }: PrescriptionCardProps) {
+  const isExpired = prescription.status === "expired";
+  const isActive = prescription.status === "active";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -37,7 +41,8 @@ export default function PrescriptionCard({
       {/* Top row: Status Badge & Date */}
       <div className="prescription-card-header">
         <span className={`prescription-status-badge badge-${prescription.status}`}>
-          ● {prescription.status}
+          {prescription.status.charAt(0).toUpperCase() + prescription.status.slice(1)}
+          <span className={`status-dot ${isActive ? "status-dot-pulse" : ""}`}>●</span>
         </span>
         <span className="prescription-card-date">
           {formatDate(prescription.createdAt)}
@@ -52,20 +57,24 @@ export default function PrescriptionCard({
       {/* Doctor & Patient Info */}
       <div className="prescription-people-info">
         <div className="prescription-doctor">
-          👨‍⚕️ {prescription.doctorName}
+          <Stethoscope className="w-4 h-4 text-teal-600 dark:text-emerald-400" />
+          <span className="info-label">Doctor:</span>
+          <span className="info-val">{prescription.doctorName.startsWith("Dr.") ? prescription.doctorName : `Dr. ${prescription.doctorName}`}</span>
         </div>
         <div className="prescription-patient">
-          👤 {prescription.patientName}
+          <User className="w-4 h-4 text-slate-400" />
+          <span className="info-label">Patient:</span>
+          <span className="info-val">{prescription.patientName}</span>
         </div>
       </div>
 
       {/* Medications pills */}
       <div className="prescription-medications">
         {prescription.medications.slice(0, 3).map((med) => (
-          <span key={med.name}>{med.name}</span>
+          <span key={med.name} className="rounded-exempt">{med.name}</span>
         ))}
         {prescription.medications.length > 3 && (
-          <span style={{ background: "transparent", border: "none", padding: "6px 4px", color: "var(--text-muted)" }}>
+          <span className="meds-more rounded-exempt">
             +{prescription.medications.length - 3} more
           </span>
         )}
@@ -78,7 +87,8 @@ export default function PrescriptionCard({
             onClick={() => onView(prescription.id)}
             className="prescription-view-btn rounded-exempt"
           >
-            View Details &rarr;
+            <span>View Details</span>
+            <ArrowRight className="w-4 h-4 view-arrow" />
           </button>
           {onDownload && (
             <button
@@ -86,7 +96,7 @@ export default function PrescriptionCard({
               className="prescription-download-btn rounded-exempt"
               title="Download PDF"
             >
-              ⬇
+              <Download className="w-4 h-4" />
             </button>
           )}
         </div>
@@ -94,3 +104,4 @@ export default function PrescriptionCard({
     </motion.div>
   );
 }
+
