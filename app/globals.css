@@ -1434,7 +1434,7 @@ svg, svg.lucide {
 }
 
 .navbar-search {
-  width: 320px !important;
+  width: 200px !important;
   height: 40px !important;
   border-radius: 12px !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;

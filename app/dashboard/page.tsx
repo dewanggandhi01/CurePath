@@ -154,14 +154,14 @@ export default function DashboardPage() {
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b"
+        className="flex flex-col items-center text-center justify-center gap-4 pb-4 border-b"
         style={{ borderColor: "var(--card-border)" }}
       >
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}>
+        <div className="flex flex-col items-center">
+          <h1 className="text-3xl font-bold tracking-tight" style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}>
             {greeting()}, {user.name.split(" ")[0]} 👋
           </h1>
-          <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
+          <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
             {doctor
               ? `Your clinic statistics overview · ${new Date().toLocaleDateString("en-IN", { weekday: "short", month: "short", day: "numeric" })}`
               : `Your medical panel summary · ${new Date().toLocaleDateString("en-IN", { weekday: "short", month: "short", day: "numeric" })}`}
