@@ -154,17 +154,12 @@ export default function DashboardPage() {
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center text-center justify-center gap-2 pb-5 border-b"
+        className="flex flex-col items-center text-center justify-center pb-5 border-b"
         style={{ borderColor: "var(--card-border)" }}
       >
-        <div className="flex flex-col items-center">
-          <h1 className="text-3xl font-bold tracking-tight" style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}>
-            Prescription Analytics Overview
-          </h1>
-          <p className="text-sm mt-1 uppercase font-bold tracking-widest text-emerald-600 dark:text-emerald-400">
-            Revenue | Patients | Growth | Prescriptions
-          </p>
-        </div>
+        <h1 className="section-title">
+          Prescription Analytics Overview
+        </h1>
       </motion.div>
 
       {/* Stats and Graph Side-by-Side Section */}
@@ -181,7 +176,7 @@ export default function DashboardPage() {
             >
               <div className="metric-header">
                 <div className="metric-icon">
-                  <Users className="w-5.5 h-5.5" />
+                  <Users className="w-5 h-5" />
                 </div>
                 <div className="growth positive">+12%</div>
               </div>
@@ -198,7 +193,7 @@ export default function DashboardPage() {
             >
               <div className="metric-header">
                 <div className="metric-icon" style={{ background: "rgba(37, 99, 235, 0.08)", color: "#2563eb" }}>
-                  <FileText className="w-5.5 h-5.5" />
+                  <FileText className="w-5 h-5" />
                 </div>
                 <div className="growth positive">+8%</div>
               </div>
@@ -215,7 +210,7 @@ export default function DashboardPage() {
             >
               <div className="metric-header">
                 <div className="metric-icon" style={{ background: "rgba(16, 185, 129, 0.08)", color: "#10b981" }}>
-                  <Activity className="w-5.5 h-5.5" />
+                  <Activity className="w-5 h-5" />
                 </div>
                 <div className="growth positive">+5%</div>
               </div>
@@ -232,7 +227,7 @@ export default function DashboardPage() {
             >
               <div className="metric-header">
                 <div className="metric-icon" style={{ background: "rgba(245, 158, 11, 0.08)", color: "#d97706" }}>
-                  <Calendar className="w-5.5 h-5.5" />
+                  <Calendar className="w-5 h-5" />
                 </div>
                 <div className="growth positive">+15%</div>
               </div>
@@ -251,8 +246,8 @@ export default function DashboardPage() {
             {/* Analytics Header */}
             <div className="analytics-header">
               <div>
-                <h2>Prescription Analytics</h2>
-                <p>Practice metrics and issuing flow</p>
+                <h2 className="chart-title">Prescription Analytics</h2>
+                <p className="chart-subtitle">Practice metrics and issuing flow</p>
               </div>
               <select
                 value={timeRange}
@@ -269,16 +264,16 @@ export default function DashboardPage() {
             {/* Statistics Above Chart */}
             <div className="analytics-stats">
               <div className="analytics-stats-item">
-                <span>Total Prescriptions</span>
-                <h3>{prescriptions.length}</h3>
+                <span className="analytics-stat-label">Total Prescriptions</span>
+                <h3 className="analytics-stat-value">{prescriptions.length}</h3>
               </div>
               <div className="analytics-stats-item">
-                <span>Growth</span>
-                <h3>+12%</h3>
+                <span className="analytics-stat-label">Growth</span>
+                <h3 className="analytics-stat-value">+12%</h3>
               </div>
               <div className="analytics-stats-item">
-                <span>Active Cases</span>
-                <h3>{active}</h3>
+                <span className="analytics-stat-label">Active Cases</span>
+                <h3 className="analytics-stat-value">{active}</h3>
               </div>
             </div>
 
@@ -322,7 +317,7 @@ export default function DashboardPage() {
         </div>
       ) : (
         /* Patient view stats - normal 3-column span, no chart */
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {/* Active Prescriptions */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -332,7 +327,7 @@ export default function DashboardPage() {
           >
             <div className="metric-header">
               <div className="metric-icon">
-                <Activity className="w-5.5 h-5.5" />
+                <Activity className="w-5 h-5" />
               </div>
               <div className="growth positive">Active</div>
             </div>
@@ -349,7 +344,7 @@ export default function DashboardPage() {
           >
             <div className="metric-header">
               <div className="metric-icon" style={{ background: "rgba(37, 99, 235, 0.08)", color: "#2563eb" }}>
-                <FileText className="w-5.5 h-5.5" />
+                <FileText className="w-5 h-5" />
               </div>
               <div className="growth positive">Total</div>
             </div>
@@ -366,7 +361,7 @@ export default function DashboardPage() {
           >
             <div className="metric-header">
               <div className="metric-icon" style={{ background: "rgba(245, 158, 11, 0.08)", color: "#d97706" }}>
-                <ClipboardList className="w-5.5 h-5.5" />
+                <ClipboardList className="w-5 h-5" />
               </div>
               <div className="growth positive">Records</div>
             </div>

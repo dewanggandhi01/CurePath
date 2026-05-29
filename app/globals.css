@@ -1974,8 +1974,8 @@ svg, svg.lucide {
 
 .dashboard-grid {
   display: grid !important;
-  grid-template-columns: 380px 1fr !important;
-  gap: 28px !important;
+  grid-template-columns: 320px 1fr !important;
+  gap: 20px !important;
   align-items: start !important;
 }
 
@@ -1987,8 +1987,8 @@ svg, svg.lucide {
 
 .metrics-grid {
   display: grid !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 20px !important;
+  grid-template-columns: repeat(2, minmax(180px, 1fr)) !important;
+  gap: 16px !important;
 }
 
 @media (max-width: 640px) {
@@ -2000,8 +2000,9 @@ svg, svg.lucide {
 /* Metric card */
 .metric-card {
   background: #ffffff !important;
-  border-radius: 24px !important;
-  padding: 24px !important;
+  border-radius: 14px !important;
+  padding: 16px !important;
+  height: 140px !important;
   position: relative !important;
   overflow: hidden !important;
   border: 1px solid #eef2f7 !important;
@@ -2014,8 +2015,8 @@ svg, svg.lucide {
 }
 
 .metric-card:hover {
-  transform: translateY(-6px) !important;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06) !important;
   border-color: #cbd5e1 !important;
 }
 
@@ -2028,7 +2029,7 @@ svg, svg.lucide {
 
 [data-theme="dark"] .metric-card:hover {
   border-color: rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Accent strip for metric card */
@@ -2038,7 +2039,7 @@ svg, svg.lucide {
   top: 0 !important;
   left: 0 !important;
   width: 100% !important;
-  height: 5px !important;
+  height: 4px !important;
   background: linear-gradient(90deg, #0f766e, #10b981) !important;
 }
 
@@ -2050,9 +2051,9 @@ svg, svg.lucide {
 }
 
 .metric-icon {
-  width: 56px !important;
-  height: 56px !important;
-  border-radius: 16px !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 10px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -2071,9 +2072,9 @@ svg, svg.lucide {
 }
 
 .growth {
-  font-size: 13px !important;
+  font-size: 11px !important;
   font-weight: 700 !important;
-  padding: 4px 10px !important;
+  padding: 4px 8px !important;
   border-radius: 999px !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -2100,18 +2101,18 @@ svg, svg.lucide {
 }
 
 .metric-card h3 {
-  font-size: 52px !important;
-  font-weight: 800 !important;
-  margin: 18px 0 6px !important;
+  font-size: 34px !important;
+  font-weight: 700 !important;
+  margin: 12px 0 4px !important;
   color: var(--text-primary) !important;
   line-height: 1 !important;
-  letter-spacing: -0.04em !important;
+  letter-spacing: -0.03em !important;
   transition: all 0.3s ease !important;
 }
 
 .metric-card p {
   color: #64748b !important;
-  font-size: 15px !important;
+  font-size: 13px !important;
   font-weight: 500 !important;
 }
 
@@ -2122,10 +2123,11 @@ svg, svg.lucide {
 /* Analytics Card */
 .analytics-card {
   background: 
-    url('/heartbeat.svg') right 28px top 28px no-repeat,
+    url('/heartbeat.svg') right 20px top 20px no-repeat,
     #ffffff !important;
-  border-radius: 28px !important;
-  padding: 28px !important;
+  border-radius: 14px !important;
+  padding: 20px !important;
+  min-height: 420px !important;
   border: 1px solid #eef2f7 !important;
   box-shadow: 
     0 4px 12px rgba(0, 0, 0, 0.02),
@@ -2135,7 +2137,7 @@ svg, svg.lucide {
 
 [data-theme="dark"] .analytics-card {
   background: 
-    url('/heartbeat.svg') right 28px top 28px no-repeat,
+    url('/heartbeat.svg') right 20px top 20px no-repeat,
     var(--card-bg-glass) !important;
   background-blend-mode: overlay !important;
   backdrop-filter: blur(12px) !important;
@@ -2148,19 +2150,18 @@ svg, svg.lucide {
   align-items: center !important;
   justify-content: space-between !important;
   width: 100% !important;
-  margin-bottom: 24px !important;
+  margin-bottom: 20px !important;
   flex-wrap: wrap !important;
   gap: 16px !important;
 }
 
-.analytics-header h2 {
-  font-size: 20px !important;
+.chart-title {
+  font-size: 22px !important;
   font-weight: 700 !important;
   color: var(--text-primary) !important;
-  letter-spacing: -0.02em !important;
 }
 
-.analytics-header p {
+.chart-subtitle {
   font-size: 13px !important;
   color: var(--text-secondary) !important;
   margin-top: 2px !important;
@@ -2185,9 +2186,9 @@ svg, svg.lucide {
 .analytics-stats {
   display: flex !important;
   gap: 40px !important;
-  margin-bottom: 28px !important;
+  margin-bottom: 20px !important;
   border-bottom: 1px solid var(--card-border) !important;
-  padding-bottom: 20px !important;
+  padding-bottom: 16px !important;
   flex-wrap: wrap !important;
 }
 
@@ -2196,26 +2197,32 @@ svg, svg.lucide {
   flex-direction: column !important;
 }
 
-.analytics-stats-item span {
-  font-size: 12px !important;
+.analytics-stat-label {
+  font-size: 11px !important;
   font-weight: 600 !important;
   color: var(--text-secondary) !important;
   text-transform: uppercase !important;
   letter-spacing: 0.5px !important;
 }
 
-.analytics-stats-item h3 {
-  font-size: 32px !important;
-  font-weight: 800 !important;
+.analytics-stat-value {
+  font-size: 28px !important;
+  font-weight: 700 !important;
   color: var(--text-primary) !important;
-  margin-top: 6px !important;
-  letter-spacing: -0.03em !important;
+  margin-top: 4px !important;
   line-height: 1 !important;
 }
 
 .chart-wrapper {
-  height: 320px !important;
+  height: 260px !important;
   width: 100% !important;
+}
+
+.section-title {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.02em !important;
 }
 
 
