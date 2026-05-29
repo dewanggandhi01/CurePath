@@ -85,11 +85,18 @@ export default function Navbar({
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="p-2 rounded-xl transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 hover:text-gray-700 cursor-pointer flex items-center justify-center rounded-exempt"
-                style={{ height: "40px", width: "40px" }}
-                title="Open Navigation"
+                className={`ananda-btn rounded-exempt ${mobileOpen ? "menu-active" : ""}`}
+                title="Toggle Navigation"
               >
-                {mobileOpen ? <X className="w-[22px] h-[22px]" /> : <Menu className="w-[22px] h-[22px]" />}
+                <div className="ananda-btn-bg rounded-exempt"></div>
+                <div className="ananda-btn-icons rounded-exempt">
+                  <svg viewBox="0 0 448 512" className="ananda-line">
+                    <path d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z" />
+                  </svg>
+                  <svg viewBox="0 0 320 512" className="ananda-close">
+                    <path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z" />
+                  </svg>
+                </div>
               </button>
 
               <Link href="/dashboard" className="flex flex-col justify-center">
@@ -228,15 +235,15 @@ export default function Navbar({
                         key={link.href}
                         href={link.href}
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14px] font-semibold transition-all hover:bg-gray-100/50 dark:hover:bg-gray-800/40"
+                        className="ananda-nav-link rounded-exempt"
                         style={{
                           color: active ? "var(--color-primary-600)" : "var(--text-secondary)",
                           background: active ? "rgba(22, 163, 74, 0.06)" : "transparent",
                           border: active ? "1px solid rgba(22, 163, 74, 0.12)" : "1px solid transparent",
                         }}
                       >
-                        <link.icon className="w-4 h-4" />
-                        {link.label}
+                        <link.icon className="w-4 h-4 mr-2" />
+                        <span>{link.label}</span>
                       </Link>
                     );
                   })}
