@@ -1972,37 +1972,56 @@ svg, svg.lucide {
     #0b1120 !important;
 }
 
-.dashboard-grid {
+.analytics-layout {
   display: grid !important;
-  grid-template-columns: 320px 1fr !important;
+  grid-template-columns: calc(40% - 10px) calc(60% - 10px) !important;
   gap: 20px !important;
-  align-items: start !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
 }
 
 @media (max-width: 1024px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr !important;
+  .analytics-layout {
+    grid-template-columns: calc(45% - 10px) calc(55% - 10px) !important;
+    gap: 20px !important;
   }
 }
 
-.metrics-grid {
+@media (max-width: 768px) {
+  .analytics-layout {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
+.kpi-section {
   display: grid !important;
-  grid-template-columns: repeat(2, minmax(180px, 1fr)) !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-rows: repeat(2, 1fr) !important;
   gap: 16px !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
 }
 
-@media (max-width: 640px) {
-  .metrics-grid {
-    grid-template-columns: 1fr !important;
-  }
+.analytics-section {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  width: 100% !important;
 }
 
 /* Metric card */
 .metric-card {
   background: #ffffff !important;
-  border-radius: 14px !important;
+  border-radius: 16px !important;
   padding: 16px !important;
-  height: 140px !important;
+  height: 100% !important;
+  min-height: 150px !important;
   position: relative !important;
   overflow: hidden !important;
   border: 1px solid #eef2f7 !important;
@@ -2012,6 +2031,8 @@ svg, svg.lucide {
   box-shadow: 
     0 4px 10px rgba(0, 0, 0, 0.02),
     0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
 }
 
 .metric-card:hover {
@@ -2125,14 +2146,20 @@ svg, svg.lucide {
   background: 
     url('/heartbeat.svg') right 20px top 20px no-repeat,
     #ffffff !important;
-  border-radius: 14px !important;
+  border-radius: 16px !important;
   padding: 20px !important;
-  min-height: 420px !important;
   border: 1px solid #eef2f7 !important;
   box-shadow: 
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 1px 3px rgba(0, 0, 0, 0.04) !important;
   transition: all 0.3s ease !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 [data-theme="dark"] .analytics-card {

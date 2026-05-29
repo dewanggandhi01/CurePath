@@ -164,9 +164,9 @@ export default function DashboardPage() {
 
       {/* Stats and Graph Side-by-Side Section */}
       {doctor ? (
-        <div className="dashboard-grid">
+        <div className="analytics-layout">
           {/* Left Side: Metric/KPI Cards in a 2x2 grid */}
-          <div className="metrics-grid">
+          <div className="kpi-section">
             {/* Total Patients */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -237,83 +237,85 @@ export default function DashboardPage() {
           </div>
 
           {/* Right Side: Redesigned Analytics Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.24 }}
-            className="analytics-card rounded-exempt"
-          >
-            {/* Analytics Header */}
-            <div className="analytics-header">
-              <div>
-                <h2 className="chart-title">Prescription Analytics</h2>
-                <p className="chart-subtitle">Practice metrics and issuing flow</p>
+          <div className="analytics-section">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.24 }}
+              className="analytics-card rounded-exempt"
+            >
+              {/* Analytics Header */}
+              <div className="analytics-header">
+                <div>
+                  <h2 className="chart-title">Prescription Analytics</h2>
+                  <p className="chart-subtitle">Practice metrics and issuing flow</p>
+                </div>
+                <select
+                  value={timeRange}
+                  onChange={(e) => setTimeRange(e.target.value as any)}
+                  className="rounded-exempt"
+                >
+                  <option value="6m">Last 6 Months</option>
+                  <option value="30d">Last 30 Days</option>
+                  <option value="7d">Last 7 Days</option>
+                  <option value="1y">Last Year</option>
+                </select>
               </div>
-              <select
-                value={timeRange}
-                onChange={(e) => setTimeRange(e.target.value as any)}
-                className="rounded-exempt"
-              >
-                <option value="6m">Last 6 Months</option>
-                <option value="30d">Last 30 Days</option>
-                <option value="7d">Last 7 Days</option>
-                <option value="1y">Last Year</option>
-              </select>
-            </div>
 
-            {/* Statistics Above Chart */}
-            <div className="analytics-stats">
-              <div className="analytics-stats-item">
-                <span className="analytics-stat-label">Total Prescriptions</span>
-                <h3 className="analytics-stat-value">{prescriptions.length}</h3>
+              {/* Statistics Above Chart */}
+              <div className="analytics-stats">
+                <div className="analytics-stats-item">
+                  <span className="analytics-stat-label">Total Prescriptions</span>
+                  <h3 className="analytics-stat-value">{prescriptions.length}</h3>
+                </div>
+                <div className="analytics-stats-item">
+                  <span className="analytics-stat-label">Growth</span>
+                  <h3 className="analytics-stat-value">+12%</h3>
+                </div>
+                <div className="analytics-stats-item">
+                  <span className="analytics-stat-label">Active Cases</span>
+                  <h3 className="analytics-stat-value">{active}</h3>
+                </div>
               </div>
-              <div className="analytics-stats-item">
-                <span className="analytics-stat-label">Growth</span>
-                <h3 className="analytics-stat-value">+12%</h3>
-              </div>
-              <div className="analytics-stats-item">
-                <span className="analytics-stat-label">Active Cases</span>
-                <h3 className="analytics-stat-value">{active}</h3>
-              </div>
-            </div>
 
-            {/* Chart Area */}
-            <div className="chart-wrapper">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--color-primary-500)" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="var(--color-primary-500)" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="4 4" stroke="var(--card-border)" vertical={false} />
-                  <XAxis
-                    dataKey="name"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fontSize: 10, fill: "var(--text-secondary)" }}
-                  />
-                  <YAxis
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fontSize: 10, fill: "var(--text-secondary)" }}
-                    allowDecimals={false}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Area
-                    type="monotone"
-                    dataKey="count"
-                    stroke="var(--color-primary-500)"
-                    strokeWidth={2}
-                    fill="url(#colorCount)"
-                    dot={{ r: 3, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 1.5 }}
-                    activeDot={{ r: 5, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 2 }}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </motion.div>
+              {/* Chart Area */}
+              <div className="chart-wrapper">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={chartData} margin={{ left: -20, right: 10, top: 10, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--color-primary-500)" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="var(--color-primary-500)" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="4 4" stroke="var(--card-border)" vertical={false} />
+                    <XAxis
+                      dataKey="name"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 10, fill: "var(--text-secondary)" }}
+                    />
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 10, fill: "var(--text-secondary)" }}
+                      allowDecimals={false}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area
+                      type="monotone"
+                      dataKey="count"
+                      stroke="var(--color-primary-500)"
+                      strokeWidth={2}
+                      fill="url(#colorCount)"
+                      dot={{ r: 3, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 1.5 }}
+                      activeDot={{ r: 5, fill: "var(--color-primary-500)", stroke: "var(--card-bg)", strokeWidth: 2 }}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </motion.div>
+          </div>
         </div>
       ) : (
         /* Patient view stats - normal 3-column span, no chart */
